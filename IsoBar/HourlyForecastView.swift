@@ -22,7 +22,7 @@ struct HourlyForecastView: View {
                         VStack(spacing: 20) {
                             Text(hourWeatherItem.date.formatted(date: .omitted, time: .shortened))
                             Image(systemName: "\(hourWeatherItem.symbolName).fill")
-                            Text(hourWeatherItem.temperature.formatted())
+                            Text(hourWeatherItem.temperature.formatted(.measurement(numberFormatStyle: .number.precision(.fractionLength(0)))))
                                 .fontWeight(.medium)
                         }
                         .padding()

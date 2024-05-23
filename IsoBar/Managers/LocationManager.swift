@@ -7,8 +7,10 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 class LocationManager: NSObject, ObservableObject {
+    let logger = Logger(subsystem: "LocationManager", category: "Location")
     @Published var currentLocation: CLLocation?
     
     private let locationManager = CLLocationManager()

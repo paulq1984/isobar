@@ -22,9 +22,9 @@ struct TenDayForecastView: View {
                     Text(dailyWeather.date.formatAsAbbreviatedDay())
                         .frame(maxWidth: 50, alignment: .leading)
                     Image(systemName: "\(dailyWeather.symbolName).fill")
-                    Text(dailyWeather.lowTemperature.formatted())
+                    Text(dailyWeather.lowTemperature.formatted(.measurement(numberFormatStyle: .number.precision(.fractionLength(0)))))
                         .frame(maxWidth: .infinity)
-                    Text(dailyWeather.highTemperature.formatted())
+                    Text(dailyWeather.highTemperature.formatted(.measurement(numberFormatStyle: .number.precision(.fractionLength(0)))))
                         .frame(maxWidth: .infinity)
                 }.listRowBackground(Color.blue)
             }.listStyle(.plain)
@@ -50,6 +50,7 @@ extension Date {
         formatter.dateFormat = "ha"
         return formatter.string(from: self)
     }
+
 }
 
 //#Preview {

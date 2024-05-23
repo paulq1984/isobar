@@ -15,6 +15,8 @@ struct ContentView: View {
     let weatherService = WeatherService.shared
     @State private var weather: Weather?
     
+    @State private var address = ""
+    
     var hourlyWeatherData: [HourWeather] {
         if let weather {
             return Array(weather.hourlyForecast.filter {
@@ -29,9 +31,9 @@ struct ContentView: View {
         VStack {
             if let weather {
                 VStack(){
-                    Text("PERTH, ON")
+                    Text(self.address)
                         .font(.largeTitle)
-                    Text("\(weather.currentWeather.temperature.formatted())")
+                    Text("\(weather.currentWeather.temperature.formatted(.measurement(numberFormatStyle: .number.precision(.fractionLength(0)))))")
                     
                 }
                 HourlyForecastView(hourWeatherList: hourlyWeatherData)
@@ -47,6 +49,7 @@ struct ContentView: View {
                 //if let location = locationManager.currentLocation {
                 let location = CLLocation(latitude: 44.897202, longitude:-76.246208)
                     self.weather = try await weatherService.weather(for: location)
+                reverseGeocode(location: location)
                 //}
                 
             } catch {
@@ -54,6 +57,23 @@ struct ContentView: View {
             }
         }
         
+    }
+}
+
+extension ContentView {
+    func reverseGeocode(location: CLLocation) {
+        CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
+            if let error = error {
+                print("Error: \(error)")
+                return
+            }
+
+            if let placemark = placemarks?.first {
+                self.address = "\(placemark.locality ?? ""), \(placemark.administrativeArea ?? "")"
+            } else {
+                self.address = "No address found"
+            }
+        }
     }
 }
 
