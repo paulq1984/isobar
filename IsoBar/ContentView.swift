@@ -30,12 +30,13 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if let weather {
-                VStack(){
-                    Text(self.address)
-                        .font(.largeTitle)
-                    Text("\(weather.currentWeather.temperature.formatted(.measurement(numberFormatStyle: .number.precision(.fractionLength(0)))))")
-                    
-                }
+                CurrentWeatherView(currentWeather: weather.currentWeather, address: self.$address)
+//                VStack(){
+//                    Text(self.address)
+//                        .font(.largeTitle)
+//                    Text("\(weather.currentWeather.temperature.formatted(.measurement(numberFormatStyle: .number.precision(.fractionLength(0)))))")
+//                    
+//                }
                 HourlyForecastView(hourWeatherList: hourlyWeatherData)
                 HourlyForecastChartView(hourlyWeatherData: hourlyWeatherData)
                 Spacer()

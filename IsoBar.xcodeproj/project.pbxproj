@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DB52F9172BFF84E200803D12 /* HourlyForecastChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB52F9162BFF84E200803D12 /* HourlyForecastChartView.swift */; };
+		DB52F91F2BFFB88D00803D12 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB52F91C2BFFB88D00803D12 /* WeatherManager.swift */; };
+		DB52F9212BFFB9D100803D12 /* CurrentWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB52F9202BFFB9D100803D12 /* CurrentWeatherView.swift */; };
 		DBE4311B2BFA911C00CF4873 /* IsoBarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE4311A2BFA911C00CF4873 /* IsoBarApp.swift */; };
 		DBE4311D2BFA911C00CF4873 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE4311C2BFA911C00CF4873 /* ContentView.swift */; };
 		DBE4311F2BFA911D00CF4873 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBE4311E2BFA911D00CF4873 /* Assets.xcassets */; };
@@ -19,6 +21,8 @@
 
 /* Begin PBXFileReference section */
 		DB52F9162BFF84E200803D12 /* HourlyForecastChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForecastChartView.swift; sourceTree = "<group>"; };
+		DB52F91C2BFFB88D00803D12 /* WeatherManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
+		DB52F9202BFFB9D100803D12 /* CurrentWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherView.swift; sourceTree = "<group>"; };
 		DBE431172BFA911C00CF4873 /* IsoBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IsoBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBE4311A2BFA911C00CF4873 /* IsoBarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsoBarApp.swift; sourceTree = "<group>"; };
 		DBE4311C2BFA911C00CF4873 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,6 +49,7 @@
 			isa = PBXGroup;
 			children = (
 				DBE431292BFA917700CF4873 /* LocationManager.swift */,
+				DB52F91C2BFFB88D00803D12 /* WeatherManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -77,6 +82,7 @@
 				DBE4312D2BFA972700CF4873 /* HourlyForecastView.swift */,
 				DBE4312F2BFA9C7800CF4873 /* TenDayForecastView.swift */,
 				DB52F9162BFF84E200803D12 /* HourlyForecastChartView.swift */,
+				DB52F9202BFFB9D100803D12 /* CurrentWeatherView.swift */,
 			);
 			path = IsoBar;
 			sourceTree = "<group>";
@@ -160,7 +166,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBE4312E2BFA972700CF4873 /* HourlyForecastView.swift in Sources */,
+				DB52F9212BFFB9D100803D12 /* CurrentWeatherView.swift in Sources */,
 				DBE4311D2BFA911C00CF4873 /* ContentView.swift in Sources */,
+				DB52F91F2BFFB88D00803D12 /* WeatherManager.swift in Sources */,
 				DBE4311B2BFA911C00CF4873 /* IsoBarApp.swift in Sources */,
 				DB52F9172BFF84E200803D12 /* HourlyForecastChartView.swift in Sources */,
 				DBE4312A2BFA917700CF4873 /* LocationManager.swift in Sources */,
