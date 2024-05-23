@@ -17,12 +17,22 @@ struct CurrentWeatherView: View {
             Text("CURRENT CONDITIONS")
             .font(.caption)
             .opacity(0.5)
-            VStack(alignment: .leading) {
+            VStack(alignment: .center) {
                 Text(address)
-                Text(currentWeather.temperature.formatted(.measurement(numberFormatStyle: .number.precision(.fractionLength(0)))))
-                Text("\(currentWeather.condition)")
+                    .font(.title)
+                HStack() {
+                    Image(systemName: "\(currentWeather.symbolName).fill")
+                        .resizable()
+                        .frame(width: 100, height: 100)
+                    Spacer()
+                    VStack() {
+                        Text(currentWeather.temperature.formatted(.measurement(numberFormatStyle: .number.precision(.fractionLength(0)))))
+                            .font(.largeTitle)
+                    }
+                    
+                }
             }
-            .padding()
+            .padding(.vertical)
         }
         .padding().background {
             Color.blue
