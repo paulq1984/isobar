@@ -11,36 +11,49 @@ import WeatherKit
 import OSLog
 
 @Observable class WeatherManager {
-    private let weatherService = WeatherService()
-    var weather: Weather?
+    static let shared = WeatherManager()
+    let service = WeatherService.shared
     
-    var logger = Logger(subsystem: "WeatherManager", category: "weather")
-    var address = ""
+    var tempFormatter: MeasurementFormatter = {
+        let formatter = MeasurementFormatter()
+        formatter.numberFormatter.maximumFractionDigits = 0
+        return formatter
+    }()
     
-    func getWeather(location: CLLocation) async {
-        do {
-            weather = try await Task.detached(priority: .userInitiated) { [weak self] in
-                return try await self?.weatherService.weather(for: .init(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude))
-            }.value
-            reverseGeocode(location: location)
-        } catch {
-            logger.error("Failed to get weather \(error)")
-        }
+    func currentWeather(for location: CLLocation) async -> CurrentWeather? {
+        let currentWeather = await Task.detached(priority: .userInitiated) {
+            let forecast = try? await self.service.weather(for: location, including: .current)
+            return forecast
+        }.value
+        return currentWeather
     }
     
-    func reverseGeocode(location: CLLocation) {
-        CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
-            if let error = error {
-                print("Error: \(error)")
-                return
-            }
-
-            if let placemark = placemarks?.first {
-                self.address = "\(placemark.locality ?? ""), \(placemark.administrativeArea ?? "")"
-                self.logger.info("\(self.address)")
-            } else {
-                self.address = "No address found"
-            }
-        }
+    func hourlyForecast(for location: CLLocation) async -> Forecast<HourWeather>? {
+        let hourlyForecast = await Task.detached(priority: .userInitiated) {
+            let forecast = try? await self.service.weather(
+                for: location,
+                including: .hourly
+            )
+            return forecast
+        }.value
+        return hourlyForecast
+    }
+    
+    func dailyForecast(for location: CLLocation) async -> Forecast<DayWeather>? {
+        let dailyForecast = await Task.detached(priority: .userInitiated) {
+            let forecast = try? await self.service.weather(
+                for: location,
+                including: .daily
+            )
+            return forecast
+        }.value
+        return dailyForecast
+    }
+    
+    func weatherAttribution() async -> WeatherAttribution? {
+        let attribution = await Task(priority: .userInitiated) {
+            return try? await self.service.attribution
+        }.value
+        return attribution
     }
 }

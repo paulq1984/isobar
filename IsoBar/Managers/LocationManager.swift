@@ -9,28 +9,64 @@ import Foundation
 import CoreLocation
 import OSLog
 
-class LocationManager: NSObject, ObservableObject {
-    let logger = Logger(subsystem: "LocationManager", category: "Location")
-    @Published var currentLocation: CLLocation?
-    
-    private let locationManager = CLLocationManager()
+@Observable
+class LocationManager: NSObject, CLLocationManagerDelegate {
+    @ObservationIgnored let manager = CLLocationManager()
+    var userLocation: CLLocation?
+    var currentLocation: City?
+    var isAuthorized = false
     
     override init() {
         super.init()
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.distanceFilter = kCLDistanceFilterNone
-        locationManager.requestAlwaysAuthorization()
-        locationManager.startUpdatingLocation()
-        locationManager.delegate = self
+        manager.delegate = self
     }
-}
-
-extension LocationManager: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last, currentLocation == nil else { return }
-        DispatchQueue.main.async {
-            self.currentLocation = location
+    
+    func startLocationServices() {
+        if manager.authorizationStatus == .authorizedAlways || manager.authorizationStatus == .authorizedWhenInUse {
+            manager.startUpdatingLocation()
+            isAuthorized = true
+        } else {
+            isAuthorized = false
+            manager.requestWhenInUseAuthorization()
         }
     }
     
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        userLocation = locations.last
+        if let userLocation {
+            Task {
+                let name = await getLocationName(for: userLocation)
+                currentLocation = City(name: name, latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
+            }
+        }
+    }
+    
+    func getLocationName(for location: CLLocation) async -> String {
+        let name = try? await CLGeocoder().reverseGeocodeLocation(location).first?.locality
+        return name ?? ""
+    }
+    
+    func getTimezone(for location: CLLocation) async -> TimeZone {
+        let timezone = try? await CLGeocoder().reverseGeocodeLocation(location).first?.timeZone
+        return timezone ?? .current
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        case .authorizedAlways, .authorizedWhenInUse:
+            isAuthorized = true
+            manager.requestLocation()
+        case .notDetermined:
+            isAuthorized = false
+            manager.requestWhenInUseAuthorization()
+        case .denied:
+            isAuthorized = false
+        default:
+            startLocationServices()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error.localizedDescription)
+    }
 }
